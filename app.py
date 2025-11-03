@@ -3,7 +3,7 @@ import os
 
 app = Flask(__name__)
 
-# Simple login credentials
+# Simple login password
 PASSWORD = "HOME123321"
 
 # Home login page
