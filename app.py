@@ -3,40 +3,36 @@ import os
 
 app = Flask(__name__)
 
-# Simple login credentials
+from flask import Flask, render_template, request, redirect, url_for
+import os
+
+app = Flask(__name__)
+
+# Password for home login
 PASSWORD = "HOME123321"
 
-# Login page
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
+# Home login page
+@app.route('/home/login', methods=['GET', 'POST'])
+def home_login():
     if request.method == 'POST':
-        password = request.form.get('password')
+        password = request.form['password']
         if password == PASSWORD:
-            return redirect(url_for('rota'))
+            return redirect(url_for('home_rota'))
         else:
-            error = "Wrong password! Try again."
-    return render_template('login.html', error=error)
+            return "Wrong password! Try again."
+    return render_template('login.html')
 
-# Rota page
-@app.route('/rota')
-def rota():
+# Home rota page
+@app.route('/home/rota', methods=['GET', 'POST'])
+def home_rota():
+    if request.method == 'POST':
+        # Handle photo upload here
+        uploaded_file = request.files.get('photo')
+        if uploaded_file:
+            uploaded_file.save(os.path.join('static/uploads', uploaded_file.filename))
     return render_template('rota.html')
 
-# Upload photo (handle uploaded images)
-@app.route('/upload', methods=['POST'])
-def upload():
-    uploaded_file = request.files.get('photo')
-    name = request.form.get('name')
-    if uploaded_file and name:
-        upload_folder = os.path.join('static', 'uploads', name)
-        os.makedirs(upload_folder, exist_ok=True)
-        file_path = os.path.join(upload_folder, uploaded_file.filename)
-        uploaded_file.save(file_path)
-        return redirect(url_for('rota'))
-    return "Upload failed. Please try again."
-
-# Existing routes
+# Existing pages
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -46,6 +42,6 @@ def cybersecurity():
     return render_template('cybersecurity.html')
 
 # Run the app
-if __name__ == "__main__":
+if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
