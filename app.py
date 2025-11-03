@@ -1,53 +1,66 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
 # Password for login
 PASSWORD = "HOME123321"
 
-# Folder for uploaded images
+# List of housemates and their cleaning days
+ROTA = {
+    "Monday": "Ijaz",
+    "Tuesday": "Shehryar",
+    "Wednesday": "Wasif",
+    "Thursday": "Samad",
+    "Friday": "Zahid",
+    "Saturday": "Imran",
+    "Sunday": "Combine"
+}
+
 UPLOAD_FOLDER = "static/uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-# Make sure uploads folder exists
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-# Home (index)
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-# Cybersecurity page
-@app.route("/cybersecurity")
-def cybersecurity():
-    return render_template("cybersecurity.html")
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 # Login page
-@app.route("/home/login", methods=["GET", "POST"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
-    if request.method == "POST":
-        password = request.form.get("password")
+    if request.method == 'POST':
+        password = request.form.get('password')
         if password == PASSWORD:
-            return redirect(url_for("rota"))
+            return redirect(url_for('rota'))
         else:
             error = "Wrong password! Try again."
-    return render_template("login.html", error=error)
+    return render_template('login.html', error=error)
 
-# Rota + upload photo
-@app.route("/home/rota", methods=["GET", "POST"])
+# Rota page
+@app.route('/rota', methods=['GET', 'POST'])
 def rota():
-    if request.method == "POST":
-        name = request.form.get("name")
-        file = request.files.get("photo")
-        if file and name:
-            filename = secure_filename(f"{name}_{file.filename}")
-            file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-    return render_template("rota.html")
+    if request.method == 'POST':
+        username = request.form.get('username')
+        file = request.files.get('file')
+        if username and file:
+            user_folder = os.path.join(UPLOAD_FOLDER, username)
+            if not os.path.exists(user_folder):
+                os.makedirs(user_folder)
+            file.save(os.path.join(user_folder, file.filename))
+            return redirect(url_for('rota'))
 
-# Run the app
+    return render_template('rota.html', rota=ROTA)
+
+# Homepage
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/cybersecurity')
+def cybersecurity():
+    return render_template('cybersecurity.html')
+
+@app.route('/entertainment')
+def entertainment():
+    return render_template('entertainment.html')
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)

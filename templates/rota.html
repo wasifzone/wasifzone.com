@@ -1,96 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Cleaning Rota</title>
-    <style>
-        body {
-            background: #111;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 40px;
-        }
-        table {
-            margin: 0 auto;
-            border-collapse: collapse;
-            width: 80%;
-        }
-        th, td {
-            border: 1px solid #666;
-            padding: 10px;
-        }
-        th {
-            background: #333;
-        }
-        td {
-            background: #222;
-        }
-        input, button {
-            margin-top: 5px;
-        }
-        a {
-            color: #ccc;
-            text-decoration: none;
-            display: block;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Rota</title>
 </head>
 <body>
-    <h1>Weekly Cleaning Rota</h1>
-    <table>
-        <tr><th>Day</th><th>Name</th><th>Upload Photo</th></tr>
-        <tr><td>Monday</td><td>Ijaz Rauf</td><td>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="name" value="Ijaz_Rauf">
-                <input type="file" name="photo" required>
-                <button type="submit">Upload</button>
-            </form>
-        </td></tr>
-        <tr><td>Tuesday</td><td>Shehryar</td><td>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="name" value="Shehryar">
-                <input type="file" name="photo" required>
-                <button type="submit">Upload</button>
-            </form>
-        </td></tr>
-        <tr><td>Wednesday</td><td>Wasif</td><td>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="name" value="Wasif">
-                <input type="file" name="photo" required>
-                <button type="submit">Upload</button>
-            </form>
-        </td></tr>
-        <tr><td>Thursday</td><td>Samad</td><td>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="name" value="Samad">
-                <input type="file" name="photo" required>
-                <button type="submit">Upload</button>
-            </form>
-        </td></tr>
-        <tr><td>Friday</td><td>Zahid</td><td>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="name" value="Zahid">
-                <input type="file" name="photo" required>
-                <button type="submit">Upload</button>
-            </form>
-        </td></tr>
-        <tr><td>Saturday</td><td>Imran</td><td>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="name" value="Imran">
-                <input type="file" name="photo" required>
-                <button type="submit">Upload</button>
-            </form>
-        </td></tr>
-        <tr><td>Sunday</td><td>All (Combine)</td><td>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="name" value="All">
-                <input type="file" name="photo" required>
-                <button type="submit">Upload</button>
-            </form>
-        </td></tr>
+    <h1>Cleaning Rota</h1>
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Day</th>
+            <th>Housemate</th>
+            <th>Upload Photo</th>
+        </tr>
+        {% for day, person in rota.items() %}
+        <tr>
+            <td>{{ day }}</td>
+            <td>{{ person }}</td>
+            <td>
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="username" value="{{ person }}">
+                    <input type="file" name="file" required>
+                    <button type="submit">Upload</button>
+                </form>
+                <p>Uploaded photos:</p>
+                {% set folder = "static/uploads/" + person %}
+                {% if folder|os_path_exists %}
+                    <ul>
+                    {% for filename in os_listdir(folder) %}
+                        <li>{{ filename }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No photos uploaded yet.</p>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
     </table>
-    <a href="/">← Back to Main Website</a>
 </body>
 </html>

@@ -1,57 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Home Login</title>
-    <style>
-        body {
-            background: #222;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 100px;
-        }
-        form {
-            background-color: rgba(0, 0, 0, 0.7);
-            display: inline-block;
-            padding: 30px;
-            border-radius: 10px;
-        }
-        input[type="password"] {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            width: 200px;
-        }
-        input[type="submit"] {
-            padding: 10px 20px;
-            margin-top: 10px;
-            background: green;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        a {
-            display: block;
-            color: #bbb;
-            margin-top: 10px;
-            text-decoration: none;
-        }
-    </style>
 </head>
 <body>
-    <h1>Home Login</h1>
+    <h1>Login</h1>
+    {% if error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
     <form method="POST">
-        <p><input type="password" name="password" placeholder="Enter Password" required></p>
-        <p><input type="submit" value="Login"></p>
-        {% if error %}
-        <p style="color:red;">{{ error }}</p>
-        {% endif %}
+        <label>Password:</label>
+        <input type="password" name="password" required>
+        <button type="submit">Login</button>
     </form>
-    <a href="/">Back to Main Site</a>
 </body>
 </html>
-
-
