@@ -1,51 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home Cleaning Rota</title>
+    <meta charset="UTF-8">
+    <title>Home Rota</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+        }
+        form input[type="file"] {
+            margin-top: 5px;
+        }
+        form button {
+            margin-top: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>House Cleaning Rota</h1>
-    <table border="1">
-        <tr>
-            <th>Day</th>
-            <th>Housemate</th>
-            <th>Photo</th>
-        </tr>
-        <tr>
-            <td>Monday</td>
-            <td>Ijaz Rauf</td>
-            <td><img src="{{ url_for('static', filename='photos/ijaz.jpg') }}" width="100"></td>
-        </tr>
-        <tr>
-            <td>Tuesday</td>
-            <td>Shehryar</td>
-            <td><img src="{{ url_for('static', filename='photos/shehryar.jpg') }}" width="100"></td>
-        </tr>
-        <tr>
-            <td>Wednesday</td>
-            <td>Wasif</td>
-            <td><img src="{{ url_for('static', filename='photos/wasif.jpg') }}" width="100"></td>
-        </tr>
-        <tr>
-            <td>Thursday</td>
-            <td>Samad</td>
-            <td><img src="{{ url_for('static', filename='photos/samad.jpg') }}" width="100"></td>
-        </tr>
-        <tr>
-            <td>Friday</td>
-            <td>Zahid</td>
-            <td><img src="{{ url_for('static', filename='photos/zahid.jpg') }}" width="100"></td>
-        </tr>
-        <tr>
-            <td>Saturday</td>
-            <td>Imran</td>
-            <td><img src="{{ url_for('static', filename='photos/imran.jpg') }}" width="100"></td>
-        </tr>
-        <tr>
-            <td>Sunday</td>
-            <td>All Housemates</td>
-            <td><img src="{{ url_for('static', filename='photos/combine.jpg') }}" width="100"></td>
-        </tr>
-    </table>
+
+    <h1>House Rota</h1>
+    <ul>
+        <li>
+            Monday: Ijaz Rauf
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="name" value="Ijaz Rauf">
+                <input type="file" name="photo" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </li>
+        <li>
+            Tuesday: Shehryar
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="name" value="Shehryar">
+                <input type="file" name="photo" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </li>
+        <li>
+            Wednesday: Wasif
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="name" value="Wasif">
+                <input type="file" name="photo" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </li>
+        <li>
+            Thursday: Samad
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="name" value="Samad">
+                <input type="file" name="photo" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </li>
+        <li>
+            Friday: Zahid
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="name" value="Zahid">
+                <input type="file" name="photo" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </li>
+        <li>
+            Saturday: Imran
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="name" value="Imran">
+                <input type="file" name="photo" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </li>
+        <li>
+            Sunday: All Housemates
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="name" value="Combine">
+                <input type="file" name="photo" required>
+                <button type="submit">Upload Photo</button>
+            </form>
+        </li>
+    </ul>
+
+    <p><a href="/login" style="color: #0af;">Back to Login</a></p>
+
 </body>
 </html>
