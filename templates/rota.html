@@ -1,40 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Rota</title>
+    <title>Home Rota</title>
 </head>
 <body>
     <h1>Cleaning Rota</h1>
-    <table border="1" cellpadding="10">
-        <tr>
-            <th>Day</th>
-            <th>Housemate</th>
-            <th>Upload Photo</th>
-        </tr>
-        {% for day, person in rota.items() %}
-        <tr>
-            <td>{{ day }}</td>
-            <td>{{ person }}</td>
-            <td>
-                <form method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="username" value="{{ person }}">
-                    <input type="file" name="file" required>
-                    <button type="submit">Upload</button>
-                </form>
-                <p>Uploaded photos:</p>
-                {% set folder = "static/uploads/" + person %}
-                {% if folder|os_path_exists %}
-                    <ul>
-                    {% for filename in os_listdir(folder) %}
-                        <li>{{ filename }}</li>
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No photos uploaded yet.</p>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <p>Upload your cleaning evidence photo below.</p>
+
+    <ul>
+    {% for name, day in housemates.items() %}
+        <li>
+            <strong>{{ name }} ({{ day }})</strong>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="housemate" value="{{ name }}">
+                <input type="file" name="file" required>
+                <button type="submit">Upload</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="/">Back to Home</a>
 </body>
 </html>
+

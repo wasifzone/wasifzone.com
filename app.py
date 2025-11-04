@@ -3,52 +3,53 @@ import os
 
 app = Flask(__name__)
 
-# Password for login
+# Simple login password
 PASSWORD = "HOME123321"
 
-# List of housemates and their cleaning days
-ROTA = {
-    "Monday": "Ijaz",
-    "Tuesday": "Shehryar",
-    "Wednesday": "Wasif",
-    "Thursday": "Samad",
-    "Friday": "Zahid",
-    "Saturday": "Imran",
-    "Sunday": "Combine"
+# Folder to store uploads
+UPLOAD_FOLDER = "static/uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Housemates and their assigned days
+housemates = {
+    "Ijaz Rauf": "Monday",
+    "Shehryar": "Tuesday",
+    "Wasif": "Wednesday",
+    "Samad": "Thursday",
+    "Zahid": "Friday",
+    "Imran": "Saturday",
+    "Combine": "Sunday"
 }
 
-UPLOAD_FOLDER = "static/uploads"
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-
-# Login page
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+# Home login page
+@app.route('/home/login', methods=['GET', 'POST'])
+def home_login():
     error = None
     if request.method == 'POST':
         password = request.form.get('password')
         if password == PASSWORD:
-            return redirect(url_for('rota'))
+            return redirect(url_for('home_rota'))
         else:
             error = "Wrong password! Try again."
     return render_template('login.html', error=error)
 
-# Rota page
-@app.route('/rota', methods=['GET', 'POST'])
-def rota():
+# Home rota page
+@app.route('/home/rota', methods=['GET', 'POST'])
+def home_rota():
     if request.method == 'POST':
-        username = request.form.get('username')
+        # Get which housemate's upload was submitted
+        housemate = request.form.get('housemate')
         file = request.files.get('file')
-        if username and file:
-            user_folder = os.path.join(UPLOAD_FOLDER, username)
-            if not os.path.exists(user_folder):
-                os.makedirs(user_folder)
-            file.save(os.path.join(user_folder, file.filename))
-            return redirect(url_for('rota'))
+        if housemate and file:
+            # Create folder for housemate if doesn't exist
+            housemate_folder = os.path.join(UPLOAD_FOLDER, housemate)
+            os.makedirs(housemate_folder, exist_ok=True)
+            # Save file
+            file.save(os.path.join(housemate_folder, file.filename))
+            return redirect(url_for('home_rota'))
+    return render_template('rota.html', housemates=housemates)
 
-    return render_template('rota.html', rota=ROTA)
-
-# Homepage
+# Existing routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -61,6 +62,6 @@ def cybersecurity():
 def entertainment():
     return render_template('entertainment.html')
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
